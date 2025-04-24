@@ -58,43 +58,43 @@
     <script>
         document.getElementById('form').addEventListener('submit', function(event) {
             event.preventDefault();
-            const artist = document.getElementById('searchInputArtista').value;
+            const artist = document.getElementById('searchInputArtista').value
             
             if (artist) {
                 fetch(`http://localhost:3000/getMusica/${artist}`)
                     .then(response => {
-                        // Verifique se a resposta é um erro (status 404 ou 500)
+                
                         if (!response.ok) {
-                            // Caso a resposta tenha erro, retorne a mensagem de erro
+
                             return response.json().then(data => {
-                                throw new Error(data.message || 'Erro desconhecido');
+                                throw new Error(data.message || 'Erro desconhecido')
                             });
                         }
-                        return response.json(); // Caso a resposta seja OK, retorne o JSON com as músicas
+                        return response.json()
                     })
                     .then(songs => {
-                        const songsContainer = document.getElementById('songsContainer');
-                        songsContainer.innerHTML = ''; // Limpa o container
+                        const songsContainer = document.getElementById('songsContainer')
+                        songsContainer.innerHTML = ''
     
                         if (songs.length > 0) {
-                            // Exibe as músicas se encontradas
+                           
                             songs.forEach(song => {
                                 const li = document.createElement('li');
-                                li.textContent = `${song.song} - ${song.artist}`;
-                                songsContainer.appendChild(li);
+                                li.textContent = `${song.song} - ${song.artist}`
+                                songsContainer.appendChild(li)
                             });
                         } else {
-                            // Caso não haja músicas, mostra uma mensagem
-                            songsContainer.innerHTML = '<li>Nenhuma música encontrada para o artista.</li>';
+                            
+                            songsContainer.innerHTML = '<li>Nenhuma música encontrada para o artista.</li>'
                         }
                     })
                     .catch(error => {
-                        // Captura erros, como o erro de música não encontrada
+                       
                         alert("Nenhuma musica encontrada")
-                        console.error('Erro ao buscar músicas:', error);
-                        const songsContainer = document.getElementById('songsContainer');
-                        songsContainer.innerHTML = `<li>${error.message}</li>`; // Exibe a mensagem de erro
-                    });
+                        console.error('Erro ao buscar músicas:', error)
+                        const songsContainer = document.getElementById('songsContainer')
+                        songsContainer.innerHTML = `<li>${error.message}</li>`
+                    })
             }
         });
     </script>    
