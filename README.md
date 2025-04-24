@@ -1,8 +1,23 @@
-# Gerador-de-frases
+# Pesquisa-Artistas
+
+Professor 
+
+Diego Sauter Possamai 
+
+Alunos 
+
+André Michels da Silva  
+
+Gustavo Antonio da Costa Pereira 
+
+Maria Eduarda Nunes de souza 
+
+Luiz Felipe Schroder Marcon 
 
 Especificação Funcional 
 
-Visão Geral 
+
+#Visão Geral 
 
 Desenvolver um sistema simples que permita ao usuário pesquisar nomes das músicas existentes através do nome do artista, exibindo os resultados disponíveis de forma organizada e acessível. 
 
