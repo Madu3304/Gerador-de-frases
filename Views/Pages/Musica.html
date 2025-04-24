@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../Styless/Musica.css">
+  <title>Artista</title>
+</head>
+
+<body>
+    <nav  id="fund">
+        <nav id="navbar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="#fff" class="bi bi-headphones" viewBox="0 0 20 20">
+                <path d="M8 3a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V8a6 6 0 1 1 12 0v5a1 1 0 0 1-1 1h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1V8a5 5 0 0 0-5-5"/>
+            </svg>
+
+            <ul id="nav_list">
+                <li class="nav-item">
+                    <a href="../telas/buscar.html">Ver Artistas</a>
+                </li>
+            </ul>
+
+            <button class="btn-default">>>></button>
+
+            <button id="mobile_btn" title="Lateral"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-code-slash" viewBox="0 0 16 16">
+                <path d="M10.478 1.647a.5.5 0 1 0-.956-.294l-4 13a.5.5 0 0 0 .956.294zM4.854 4.146a.5.5 0 0 1 0 .708L1.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0m6.292 0a.5.5 0 0 0 0 .708L14.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0"/>
+            </svg></button>
+        </nav>
+        <header>
+
+            <h1>PlayList na Mão</h1>
+             
+            <form id="form" >
+                <div class="form-group">
+                  <input id="searchInputArtista" type="text" placeholder="Insira o nome do Artista">
+                  <button type="submit" id="submitArtista">Buscar</button>
+                </div>   
+            </form>
+        
+            <ul id="songsContainer" class="songs-container songs"></ul>
+        
+            <div id="prev-and-next-container" class="prev-and-next-container"></div>
+
+            <footer>
+                <div id="footer_items">
+                    <span id="copyright">
+                        &copy 2025 Quarta
+                    </span>
+                    <div class="social-media-buttons">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-github" viewBox="0 0 22 22">
+                            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/>
+                        </svg>
+                    </div>
+                </div>
+            </footer>           
+    </header>
+
+    <script>
+        document.getElementById('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const artist = document.getElementById('searchInputArtista').value;
+            
+            if (artist) {
+                fetch(`http://localhost:3000/getMusica/${artist}`)
+                    .then(response => {
+                        // Verifique se a resposta é um erro (status 404 ou 500)
+                        if (!response.ok) {
+                            // Caso a resposta tenha erro, retorne a mensagem de erro
+                            return response.json().then(data => {
+                                throw new Error(data.message || 'Erro desconhecido');
+                            });
+                        }
+                        return response.json(); // Caso a resposta seja OK, retorne o JSON com as músicas
+                    })
+                    .then(songs => {
+                        const songsContainer = document.getElementById('songsContainer');
+                        songsContainer.innerHTML = ''; // Limpa o container
+    
+                        if (songs.length > 0) {
+                            // Exibe as músicas se encontradas
+                            songs.forEach(song => {
+                                const li = document.createElement('li');
+                                li.textContent = `${song.song} - ${song.artist}`;
+                                songsContainer.appendChild(li);
+                            });
+                        } else {
+                            // Caso não haja músicas, mostra uma mensagem
+                            songsContainer.innerHTML = '<li>Nenhuma música encontrada para o artista.</li>';
+                        }
+                    })
+                    .catch(error => {
+                        // Captura erros, como o erro de música não encontrada
+                        alert("Nenhuma musica encontrada")
+                        console.error('Erro ao buscar músicas:', error);
+                        const songsContainer = document.getElementById('songsContainer');
+                        songsContainer.innerHTML = `<li>${error.message}</li>`; // Exibe a mensagem de erro
+                    });
+            }
+        });
+    </script>    
+</body>
+</html>

@@ -11,6 +11,8 @@ const getMusica = async (req, res) => {
     const response = await fetch(API_URL)
     const data = await response.json()
 
+    console.log(data)
+
     const songs = data.filter(song => song.artist.toLowerCase().includes(artist.toLowerCase()))
 
     if (songs.length === 0) {
